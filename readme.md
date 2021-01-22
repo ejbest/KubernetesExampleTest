@@ -86,7 +86,7 @@ kubectl get pods -l app=wtest -n wtestnamespace \
 </pre>
 6. It will take time to sync with Kubernetes / EKS / Nginx, use the below command to check.
 <pre>
-    kubectl get svc -n testnamespace2
+    kubectl get svc -n wtestnamespace
     # this will get the output of the environment
     # you will need to get the DNS name near the Load Balancer
 </pre>
@@ -126,7 +126,7 @@ You can also edit "replicas" in wtest-deployment.yaml choosing the desired numbe
 </pre>
 10. How can you prove there is replicas running per the instructions. 
 <pre>
-    kubectl get pods -l app=wtest -n testnamespace2 \
+    kubectl get pods -l app=wtest -n wtestnamespace \
     -o go-template='{{range .items}}{{.status.podIP}}{{"\n"}}{{end}}' \
     > static-file.txt && cat static-file.txt
 </pre>
