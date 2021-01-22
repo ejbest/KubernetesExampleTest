@@ -29,14 +29,6 @@ The exercise results must be submitted no more than 60 mins after receiving the 
 Missed the 60 min by a mile and only hope you see diligence in the submission 
 </pre>
 
-
-kubectl get svc,nodes,pods,deployments -n wtestnamespace
-
-kubectl get pods -l app=wtest -n wtestnamespace \
-    -o go-template='{{range .items}}{{.status.podIP}}{{"\n"}}{{end}}' > static-file.txt && cat static-file.txt
-
-
-
 #### Commnands to run and test
 
 **Base Requirements**
@@ -44,7 +36,7 @@ kubectl get pods -l app=wtest -n wtestnamespace \
 -  Mac workstation or Linux workstation/server to commandline control the testing exercise.
 -  AWS Command Line and Account and authenticated<br>
     https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html<br>
--  Terraform v0.14.3<br>
+-  Terraform v0.14.4<br>
     https://www.terraform.io/downloads.html
 -  Git Client<br>
     https://git-scm.com
