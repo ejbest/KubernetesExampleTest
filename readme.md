@@ -51,7 +51,7 @@ Missed the 60 min by a mile and only hope you see diligence in the submission
 </pre>
 2. Clone the files from git
 <pre>
-    git clone git@github.com:ejbest/k8lb-example.git
+    git clone git@github.com:ejbest/wtest.git
 </pre>
 3. Go to the folder that was just created
 <pre>
