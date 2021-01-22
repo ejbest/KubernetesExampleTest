@@ -1,10 +1,41 @@
-#### EJ Best: Submission of Kuberbetes Load Balancer Project 
+#### EJ Best: Submission of Docker and Kubernetes Project
 
-The following model builds High Availability, Load Balancing Nginx servers in Kubernetes containers in response to the interview assignment.
+<pre>
+1. Create a docker image with the following 
+    a. Has Node JS and NPM installed  
+    b. Has telnet, ping, wget, and curl installed 
+    c. Has java 1.8 installed 
+    d. All binaries should be reachable through /usr/bin and in default $PATH 
 
-Each Nginx instance operates its own container building on the alpine:3.10 image from the public docker repository.  Each Nginx instance presents an IP address of the instance presenting.  Also, a static IP address list can be found and updated each time there is a scale up or down.  The command below can make a static file for addition to a web page or report or console has instructions below.
+2. Run node app for "Hello William Hill" in container ]
+    a. Pull and edit the repo or create your own  node app 
+    b. The node app should say "Hello William Hill! This is <EJ>" c. Expose node app over port 80 within the Docker image created in step 1 
 
-In an effort to differentiate my approach and showcase how I become a valuable member of the team; the model uses Terraform to build Elastic Kubernetes Service (EKS) on Amazon AWS.  The assignment encourages this type of customization so I hope to impress some of my experience on you.
+3. Run three "Hello William Hill" containers using kubernetes manifest 
+    a. Run 3 replicas via kubernetes manifest of the container created in step 2 
+
+4. Return the following: 
+    a. src for your "Hello William Hill" node app 
+    b. Dockerfile that runs the node app  
+    c. Kubernetes manifest for 3 replicas of previous container 
+    d. Readme that tells me how to build and deploy my image and replicas, and how to view my expected output
+
+5. EXTRA CREDIT and TIME PERMITTING: 
+    SEE BELOW 
+
+
+The exercise results must be submitted no more than 60 mins after receiving the exercise.
+
+Missed the 60 min by a mile and only hope you see diligence in the submission 
+</pre>
+
+
+kubectl get svc,nodes,pods,deployments -n wtestnamespace
+
+kubectl get pods -l app=wtest -n wtestnamespace \
+    -o go-template='{{range .items}}{{.status.podIP}}{{"\n"}}{{end}}' > static-file.txt && cat static-file.txt
+
+
 
 #### Commnands to run and test
 
@@ -32,7 +63,8 @@ In an effort to differentiate my approach and showcase how I become a valuable m
 </pre>
 3. Go to the folder that was just created
 <pre>
-    cd k8lb-example
+    cd wtest
+    cd application
 </pre>
 4. Change Directory to the Terraform Folder and run the following commands
 <pre>
@@ -47,7 +79,7 @@ In an effort to differentiate my approach and showcase how I become a valuable m
     cd ..
     cd application
     bash start-k8-app.sh 
-    # this will setup a namespace called tempnamespace2
+    # this will setup a namespace called wtestnamespace
     # there will be a loadbalancer setup and a set of containers
     # the number of containers will be set per the replicas setup in the configuration
     # check for output for success or error messages
@@ -58,7 +90,7 @@ In an effort to differentiate my approach and showcase how I become a valuable m
     # this will get the output of the environment
     # you will need to get the DNS name near the Load Balancer
 </pre>
-7. A DNS name like below in the output, this will be the load balancer address.  This DNS name is key.
+7. A DNS name like below (example) in the output, this will be the load balancer address.  This DNS name is key.
 <pre>
     ad90a511ddb594a29beadcbe1efe67ad-594569592.us-east-1.elb.amazonaws.com 
 </pre>
@@ -86,41 +118,32 @@ In an effort to differentiate my approach and showcase how I become a valuable m
 9. Two methods to scale up and down<br>
 Command line 
 <pre>
-    kubectl scale deployment.apps/alpine --replicas=6 -n tempnamespace2
+    kubectl scale deployment.apps/wtest --replicas=6 -n wtestnamespace
 </pre>
-You can also edit "replicas" in alpine-deployment.yaml choosing the desired numbers.  Invoke by: 
+You can also edit "replicas" in wtest-deployment.yaml choosing the desired numbers.  Invoke (after edit) by: 
 <pre>
-    kubectl apply -f alpine-deployment.yaml -n tempnamespace2
+    kubectl apply -f wtest-deployment.yaml -n wtestnamespace
 </pre>
-10. Get a list of IPs in a static text file of Nginx nodes.  This list could be brought into an addition to a web page or report or console for diagnostics or otherwise. 
+10. How can you prove there is replicas running per the instructions. 
 <pre>
-    kubectl get pods -l app=alpine -n testnamespace2 \
+    kubectl get pods -l app=wtest -n testnamespace2 \
     -o go-template='{{range .items}}{{.status.podIP}}{{"\n"}}{{end}}' \
     > static-file.txt && cat static-file.txt
 </pre>
 -------------------------------------------------
 #### Bonus Items
-##### Bonus #1 How to configure to maximize availability?
-We could scale up an on-prem or cloud environment; and expand the server load.  We could serve a series of Servers that would autoscale for performance.  There is frameworks and controls around autoscaling.  For example; scaling based on 50% CPU load would maximize availabiltiy for example.  We can use similar commands like below. 
+
+##### Bonus #1 How you would expose this service publicly ?
+This project was built on AWS EKS and exposed publicly just for example.
+
+##### Bonus #2 How you would automate the scaling of it ?
+Here is one example of a command that can be wrapped in a script or other procedure
 <pre>
-kubectl autoscale deployment alpine-deployment --cpu-percent=50 --min=1 --max=10 -n tempnamespace2
+kubectl autoscale deployment wtest-deployment --cpu-percent=50 --min=1 --max=10 -n wtestnamespace
 </pre>
 The command would result in scaling up more servers as per the settings of the command.
-
-##### Bonus #2 What loads would this spinup and be able to handle?
-The above spinup in the example would increase the load as much as 10 times.  There could be a variety of server needs running in Pods such a Web Presentation, Application Program Interface (API) or other Software as a Service (SAAS) solutions.
-
-##### Bonus #3  How would logging, security be applied?
-1.	Consider using a later version of Alpine.  There are expected security patches for the OS; as well as, related pipeline tools including Terraform and Ngninx that could have updated versions due to security vulnerablities.
-2.	Set the kubelet with the --anonymous-auth=false flag.
-3.	Implement use of certificate bundles, other key flags and encryption key solutions.
-4.	Use of https 443.
-5.	Ethical Hacking of the open ports and other Penetration Testing.
-6.  Scanning of image all the way to “DAST” Dynamic application scanning; tools such as Tenable Nessus, CrowdStrick, Kenna, Aqua, StackRox or other related scanning tools.
-7.  Consider Cybernews Sources and other related avenues, for up to date Vulnerability News.
-8.  Have a solution for organized logging by some in-house modular scripts or enterprise solution with Splunk, DataDog or other related software product.
-9. Have monitoring setup via Prometheus, Grafana, Rancher, Nagios, Pager Duty or other similar Monitoring applications.
-10. The whole of the deployment operation should be Orchestrated in a Jenkins or similar Orchestration solutions, single execution and logged with "error-checked" deployments.
+<br>
+<br>
 
 Please let me know any questions; if any details are missing or if anything was interpreted incorrectly.
 
