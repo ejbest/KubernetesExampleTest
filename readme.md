@@ -9,7 +9,8 @@
 
 2. Run node app for "Hello William Hill" in container ]
     a. Pull and edit the repo or create your own  node app 
-    b. The node app should say "Hello William Hill! This is <EJ>" c. Expose node app over port 80 within the Docker image created in step 1 
+    b. The node app should say "Hello William Hill! This is <EJ>" 
+    c. Expose node app over port 80 within the Docker image created in step 1 
 
 3. Run three "Hello William Hill" containers using kubernetes manifest 
     a. Run 3 replicas via kubernetes manifest of the container created in step 2 
